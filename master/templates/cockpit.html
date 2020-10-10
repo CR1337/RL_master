@@ -1,0 +1,58 @@
+<html>
+    <head>
+
+    </head>
+    <body>
+        <form action="/device-api/program" method="post" enctype="multipart/form-data">
+            <input type="file" id="program_file" name="program_file">
+            <input type="hidden" name="action" value="post">
+            <input type="submit" name="load_program" value="Load program" />
+        </form><br>
+        <form action="/device-api/program" method="post">
+            <input type="hidden" name="action" value="delete">
+            <input type="submit" name="delete_program" value="Delete program" />
+        </form><br>
+        <form action="/device-api/program/control" method="post">
+            <input type="hidden" name="action" value="run">
+            <input type="submit" name="run_program" value="Run program" />
+        </form><br>
+        <form action="/device-api/program/control" method="post">
+            <input type="hidden" name="action" value="pause">
+            <input type="submit" name="pause_program" value="Pause program" />
+        </form><br>
+        <form action="/device-api/program/control" method="post">
+            <input type="hidden" name="action" value="continue">
+            <input type="submit" name="continue_program" value="Continue program" />
+        </form><br>
+        <form action="/device-api/program/control" method="post">
+            <input type="hidden" name="action" value="stop">
+            <input type="submit" name="stop_program" value="Stop program" />
+        </form><br>
+        <form action="/device-api/program/control" method="post">
+            <input type="hidden" name="action" value="schedule">
+            <input type="text" name="schedule_time">
+            <input type="submit" name="schedule_program" value="Schedule program" />
+        </form><br>
+        <form action="/device-api/program/control" method="post">
+            <input type="hidden" name="action" value="schedule">
+            <input type="hidden" name="schedule_time" value="23:59:59">
+            <input type="submit" name="schedule_program_at_midnight" value="Schedule program at Midnight" />
+        </form><br>
+        <form action="/device-api/program/control" method="post">
+            <input type="hidden" name="action" value="unschedule">
+            <input type="submit" name="unschedule_program" value="Unschedule program" />
+        </form><br>
+        <form action="/device-api/lock-all" methpd="get">
+            <input type="submit" name="lock_all" value="Lock all">
+        </form><br>
+        <form action="/device-api/unlock-all" methpd="get">
+            <input type="submit" name="unlock_all" value="Unlock all">
+        </form><br>
+        <form action="/device-api/testloop-all" method="post">
+            <input type="submit" name="testloop_all" value="Testloop all" />
+        </form><br>
+        <form action="/master/connect-devices" method="get">
+            <input type="submit" name="connect_devices" value="Connect Devices" />
+        </form><br>
+    </body>
+</html>
