@@ -290,3 +290,10 @@ class DeviceController():
     @classmethod
     def get_devices(cls):
         return cls._devices
+
+    @classmethod
+    def set_system_time_all(cls, year, month, day, hour, minute, second, millisecond):
+        for device in cls._devices.values():
+            device.set_system_time(
+                year, month, day, hour, minute, second, millisecond
+            )

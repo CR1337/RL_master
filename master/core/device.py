@@ -217,6 +217,21 @@ class Device():
         pass
         # TODO
 
+    def set_system_time(self, year, month, day, hour, minute, second, millisecond):
+        return self._json_request(
+            url="/system-time",
+            method="POST",
+            params={
+                'year': year,
+                'month': month,
+                'day': day,
+                'hour': hour,
+                'minute': minute,
+                'second': second,
+                'millisecond': millisecond
+            }
+        )
+
     @property
     def is_locked(self):
         return self._json_request(

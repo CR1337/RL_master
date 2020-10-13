@@ -6,6 +6,7 @@ from flask import (Blueprint, Response, redirect,
 
 from ..core.event_queue import EventQueue
 from ..util.sys_time import set_system_time
+from ..core.device_controller import DeviceController
 
 user_bp = Blueprint('user_blueprint', __name__)
 
@@ -42,9 +43,9 @@ def route_logs():
 @user_bp.route("/system-time", methods=["GET", "POST"])
 def route_system_time():
     if request.method == "GET":
-        return datetime.datetime.now().isoformat()
+        return datetime.now().isoformat()
     elif request.method == "POST":
-        data = request.get_json(force=True)
+        data = request.form
         year = int(data['year']) if 'year' in data else 0
         month = int(data['month']) if 'month' in data else 0
         day = int(data['day']) if 'day' in data else 0
@@ -55,3 +56,7 @@ def route_system_time():
         set_system_time(
             year, month, day, hour, minute, second, millisecond
         )
+        DeviceController.set_system_time_all(
+            year, month, day, hour, minute, second, millisecond
+        )
+        return ""
