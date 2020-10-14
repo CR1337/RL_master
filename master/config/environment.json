@@ -1,4 +1,4 @@
-[
-    "INTERNAL_PORT",
-    "EXTERNAL_PORT"
-]
+{
+    "INTERNAL_PORT": 8080,
+    "EXTERNAL_PORT": 8080
+}

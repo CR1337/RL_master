@@ -40,8 +40,9 @@ class Environment():
         #     return "192.168.178.0"
         # #
 
-        if key in cls._environment_keys and key in os.environ:
-            return os.environ[key]
+        if key in cls._environment_keys:  # and key in os.environ:
+            # return os.environ[key]
+            return cls._environment_keys[key]
         else:
             raise InvalidKey(key)
 
