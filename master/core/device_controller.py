@@ -159,11 +159,6 @@ class DeviceController():
         for device in cls._devices.values():
             device.set_config(entries)
 
-    # @classmethod
-    # def get_environment(cls, key, device_id):
-    #     device = cls._get_device(device_id)
-    #     return device.get_environment(key)
-
     @classmethod
     def set_program_all(cls, commands):
         for device in cls._devices.values():
@@ -250,14 +245,16 @@ class DeviceController():
         device.delete_errors()
 
     @classmethod
-    def get_logs(cls, device_id):
+    def get_logs_all(cls, device_id):
         device = cls._get_device(device_id)
         device.get_logs()
 
     @classmethod
-    def get_lock_state(cls, device_id):
-        device = cls._get_device(device_id)
-        return device.is_locked
+    def get_lock_states_all(cls):
+        states = dict()
+        for device in cls._devices.values():
+            states[device.device_id] = device.is_locked
+        return states
 
     @classmethod
     def get_program_state_all(cls):
@@ -267,9 +264,11 @@ class DeviceController():
         return states_dict
 
     @classmethod
-    def get_fuses(cls, device_id):
-        device = cls._get_device(device_id)
-        return device.fuses
+    def get_fuses_all(cls):
+        fuses = dict()
+        for device in cls._devices.values():
+            fuses[device.device_id] = device.fuses
+        return fuses
 
     @classmethod
     def heartbeat(cls, device_id):
@@ -300,3 +299,10 @@ class DeviceController():
             device.set_system_time(
                 year, month, day, hour, minute, second, millisecond
             )
+
+    @classmethod
+    def get_systems_times_all(cls):
+        times = dict()
+        for device in cls._devices.values():
+            times[device.device_id] = device.get_system_time()
+        return times

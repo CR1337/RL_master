@@ -1,12 +1,9 @@
 from itertools import count
-from datetime import datetime
 
 from flask import (Blueprint, Response, redirect,
-                   url_for, render_template, request)
+                   url_for, render_template)
 
 from ..core.event_queue import EventQueue
-from ..util.sys_time import set_system_time
-from ..core.device_controller import DeviceController
 
 user_bp = Blueprint('user_blueprint', __name__)
 
@@ -37,26 +34,4 @@ def route_event_stream():
 
 @user_bp.route("/logs", methods=["GET"])
 def route_logs():
-    pass
-
-
-@user_bp.route("/system-time", methods=["GET", "POST"])
-def route_system_time():
-    if request.method == "GET":
-        return datetime.now().isoformat()
-    elif request.method == "POST":
-        data = request.form
-        year = int(data['year']) if 'year' in data else 0
-        month = int(data['month']) if 'month' in data else 0
-        day = int(data['day']) if 'day' in data else 0
-        hour = int(data['hour']) if 'hour' in data else 0
-        minute = int(data['minute']) if 'minute' in data else 0
-        second = int(data['second']) if 'second' in data else 0
-        millisecond = int(data['millisecond']) if 'millisecond' in data else 0
-        set_system_time(
-            year, month, day, hour, minute, second, millisecond
-        )
-        DeviceController.set_system_time_all(
-            year, month, day, hour, minute, second, millisecond
-        )
-        return ""
+    raise NotImplementedError

@@ -236,6 +236,11 @@ class Device():
             }
         )
 
+    def get_system_time(self):
+        return self._json_request(
+            url="/system-time"
+        )
+
     @property
     def is_locked(self):
         return self._json_request(

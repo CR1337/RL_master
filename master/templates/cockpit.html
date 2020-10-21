@@ -42,19 +42,21 @@
             <input type="hidden" name="action" value="unschedule">
             <input type="submit" name="unschedule_program" value="Unschedule program" />
         </form><br>
-        <form action="/device-api/lock-all" methpd="get">
+        <form action="/device-api/lock-all" methpd="post">
+            <input type="hidden" name="action" value="lock">
             <input type="submit" name="lock_all" value="Lock all">
         </form><br>
-        <form action="/device-api/unlock-all" methpd="get">
+        <form action="/device-api/lock-all" methpd="post">
+            <input type="hidden" name="action" value="unlock">
             <input type="submit" name="unlock_all" value="Unlock all">
         </form><br>
-        <form action="/device-api/testloop-all" method="post">
+        <form action="/device-api/testloop" method="post">
             <input type="submit" name="testloop_all" value="Testloop all" />
         </form><br>
-        <form action="/master/connect-devices" method="get">
+        <form action="/master/connect-devices" method="post">
             <input type="submit" name="connect_devices" value="Connect Devices" />
         </form><br>
-        <form action="/user/system-time" method="post">
+        <form action="/device-api/system-time" method="post">
             <input type="text" name="year">
             <input type="text" name="month">
             <input type="text" name="day">
