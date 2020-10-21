@@ -1,11 +1,10 @@
-import itertools
 from concurrent.futures import ThreadPoolExecutor, as_completed
 
 import requests
 from flask_api import status
 
 from .device import Device
-from .environment import Environment
+from .config import Config
 
 
 class DeviceControllerError(Exception):
@@ -47,8 +46,8 @@ class DeviceController():
         # return hosts
 
         # TODO: This is a QAD-Fix!:
-        subnet_mask = Environment.get('SUBNET_MASK')
-        network_address = Environment.get('NETWORK_ADDRESS')
+        subnet_mask = Config.get("connection", 'subnet_mask')
+        network_address = Config.get("connection", 'network_address')
 
         subnet_mask_bytes = subnet_mask.split('.')
         network_address_bytes = network_address.split('.')
@@ -70,14 +69,14 @@ class DeviceController():
 
     @classmethod
     def _connection_handler(cls, host):
-        url = f"http://{host}:{Environment.get('DEVICE_PORT')}{cls._registration_url}"
+        url = f"http://{host}:{Config.get('connection', 'device_port')}{cls._registration_url}"
         print(url)
         try:
             response = requests.post(
                 url=url,
                 json={
                     # 'address': Environment.get('MASTER_IP'),
-                    'port': Environment.get('EXTERNAL_PORT')
+                    'port': Config.get("connection", 'external_port')
                 },
                 timeout=0.1  # TODO: make configurable
             )
@@ -124,7 +123,7 @@ class DeviceController():
 
         device = cls._devices[device_id]
         url = (
-            f"{device.host}:{Environment.get('DEVICE_PORT')}"
+            f"{device.host}:{Config.get('connection', 'device_port')}"
             + f"{cls._registration_url}"
         )
         try:
@@ -160,10 +159,10 @@ class DeviceController():
         for device in cls._devices.values():
             device.set_config(entries)
 
-    @classmethod
-    def get_environment(cls, key, device_id):
-        device = cls._get_device(device_id)
-        return device.get_environment(key)
+    # @classmethod
+    # def get_environment(cls, key, device_id):
+    #     device = cls._get_device(device_id)
+    #     return device.get_environment(key)
 
     @classmethod
     def set_program_all(cls, commands):
@@ -292,7 +291,11 @@ class DeviceController():
         return cls._devices
 
     @classmethod
-    def set_system_time_all(cls, year, month, day, hour, minute, second, millisecond):
+    def set_system_time_all(
+        cls,
+        year, month, day,
+        hour, minute, second, millisecond
+    ):
         for device in cls._devices.values():
             device.set_system_time(
                 year, month, day, hour, minute, second, millisecond

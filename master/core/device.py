@@ -1,7 +1,7 @@
 import requests
 import time
 from flask_api import status
-from .environment import Environment
+from .config import Config
 
 
 class DeviceError(Exception):
@@ -30,7 +30,7 @@ class Device():
         self._last_heartbeat = None
 
     def _request(self, url, args=None, params={}, method='GET'):
-        url = f"http://{self._host}:{Environment.get('DEVICE_PORT')}" + url
+        url = f"http://{self._host}:{Config.get('connection', 'device_port')}" + url
 
         if method == 'GET':
             response = requests.get(url, args=args)
@@ -217,7 +217,11 @@ class Device():
         pass
         # TODO
 
-    def set_system_time(self, year, month, day, hour, minute, second, millisecond):
+    def set_system_time(
+        self,
+        year, month, day,
+        hour, minute, second, millisecond
+    ):
         return self._json_request(
             url="/system-time",
             method="POST",

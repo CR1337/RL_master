@@ -1,0 +1,24 @@
+{
+    "connection": {
+        "internal_port": {
+            "type": 0,
+            "protected": false
+        },
+        "external_port": {
+            "type": 0,
+            "protected": false
+        },
+        "subnet_mask":{
+            "type": "",
+            "protected": false
+        },
+        "device_port": {
+            "type": 0,
+            "protected": false
+        },
+        "network_address":{
+            "type": "",
+            "protected": false
+        }
+    }
+}
