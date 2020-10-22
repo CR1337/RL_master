@@ -17,11 +17,10 @@ def route_config(device_id):
             device_id=device_id
         )
     elif request.method == 'POST':
-        DeviceController.set_config(
+        return DeviceController.set_config(
             entries=request.args['entries'],
             device_id=device_id
         )
-        return make_response(dict())
 
 
 @device_api_bp.route('/program', methods=['POST', 'DELETE'])
@@ -31,35 +30,31 @@ def route_program():
         if action == 'post':
             file = request.files['program_file']
             commands = json.load(file)
-            DeviceController.set_program_all(commands)
+            return DeviceController.set_program_all(commands)
         elif action == 'delete':
-            DeviceController.delete_program_all()
-        return make_response(dict())
+            return DeviceController.delete_program_all()
     elif request.method == 'DELETE':
-        DeviceController.delete_program_all()
-        return make_response(dict())
+        return DeviceController.delete_program_all()
 
 
 @device_api_bp.route('/program/control', methods=['POST'])
 def route_program_control():
     action = request.form['action']
     if action == 'run':
-        DeviceController.run_program_all()
+        return DeviceController.run_program_all()
     elif action == 'pause':
-        DeviceController.pause_program_all()
+        return DeviceController.pause_program_all()
     elif action == 'continue':
-        DeviceController.continue_program_all()
+        return DeviceController.continue_program_all()
     elif action == 'stop':
-        DeviceController.stop_program_all()
+        return DeviceController.stop_program_all()
     elif action == 'schedule':
-        DeviceController.schedule_program_all(request.form['schedule_time'])
+        return DeviceController.schedule_program_all(request.form['schedule_time'])
     elif action == 'unschedule':
-        DeviceController.unschedule_program_all()
+        return DeviceController.unschedule_program_all()
     else:
         # TODO: Error
-        pass
-
-    return make_response(dict())
+        return make_response(dict())
 
 
 @device_api_bp.route('/program/state', methods=['GET'])
@@ -69,8 +64,7 @@ def route_program_state():
 
 @device_api_bp.route('/<device_id>/fire', methods=['POST'])
 def route_fire(device_id):
-    DeviceController.fire(request.form['address'], device_id)
-    return make_response(dict())
+    return DeviceController.fire(request.form['address'], device_id)
 
 
 @device_api_bp.route('/fuses', methods=['GET'])
@@ -80,14 +74,12 @@ def route_fuses():
 
 @device_api_bp.route('/<device_id>/testloop', methods=['POST'])
 def route_testloop(device_id):
-    DeviceController.testloop(device_id)
-    return make_response(dict())
+    return DeviceController.testloop(device_id)
 
 
 @device_api_bp.route('/testloop', methods=['POST'])
 def route_testloop_all():
-    DeviceController.testloop_all()
-    return make_response(dict())
+    return DeviceController.testloop_all()
 
 
 @device_api_bp.route('/lock-all', methods=['GET', 'POST'])
@@ -98,12 +90,12 @@ def route_lock_all():
     elif request.method == 'POST':
         action = request.form['action']
         if action == 'lock':
-            DeviceController.lock_all()
+            return DeviceController.lock_all()
         elif action == 'unlock':
-            DeviceController.unlock_all()
+            return DeviceController.unlock_all()
         else:
-            ...
-    return make_response(dict())
+            # TODO
+            return make_response(dict())
 
 
 @device_api_bp.route('/<device_id>/errors', methods=['GET', 'DELETE'])
@@ -111,8 +103,7 @@ def route_error(device_id):
     if request.method == 'GET':
         return DeviceController.get_errors(device_id)
     elif request.method == 'DELETE':
-        DeviceController.delete_errors(device_id)
-        return make_response(dict())
+        return DeviceController.delete_errors(device_id)
 
 
 @device_api_bp.route('/<device_id>/logs', methods=['GET'])
@@ -131,17 +122,14 @@ def route_system_time():
         return times
     elif request.method == "POST":
         data = request.form
-        year = int(data['year']) if 'year' in data else 0
-        month = int(data['month']) if 'month' in data else 0
-        day = int(data['day']) if 'day' in data else 0
-        hour = int(data['hour']) if 'hour' in data else 0
-        minute = int(data['minute']) if 'minute' in data else 0
-        second = int(data['second']) if 'second' in data else 0
-        millisecond = int(data['millisecond']) if 'millisecond' in data else 0
-        set_system_time(
-            year, month, day, hour, minute, second, millisecond
-        )
-        DeviceController.set_system_time_all(
-            year, month, day, hour, minute, second, millisecond
-        )
-        return make_response(dict())
+        time_params = {
+            'year': 0, 'month': 0, 'day': 0,
+            'hour': 0, 'minute': 0, 'second': 0, 'millisecond': 0
+        }
+        for key in time_params.keys():
+            try:
+                time_params[key] = int(data[key])
+            except (ValueError, KeyError):
+                continue
+        set_system_time(**time_params)
+        return DeviceController.set_system_time_all(**time_params)

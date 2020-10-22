@@ -112,88 +112,111 @@ class DeviceController():
     @classmethod
     def set_config(cls, entries, device_id):
         device = cls._get_device(device_id)
-        device.set_config(entries)
+        return device.set_config(entries)
 
     @classmethod
     def set_config_all(cls, entries):
+        responses = dict()
         for device in cls._devices.values():
-            device.set_config(entries)
+            responses[device.device_id] = device.set_config(entries)
+        return responses
 
     @classmethod
     def set_program_all(cls, commands):
+        responses = dict()
         for device in cls._devices.values():
-            device.set_program(commands)
+            responses[device.device_id] = device.set_program(commands)
+        return responses
 
     @classmethod
     def delete_program_all(cls):
+        responses = dict()
         for device in cls._devices.values():
-            device.delete_program()
+            responses[device.device_id] = device.delete_program()
+        return responses
 
     @classmethod
     def run_program_all(cls):
+        responses = dict()
         for device in cls._devices.values():
-            device.run_program()
+            responses[device.device_id] = device.run_program()
+        return responses
 
     @classmethod
     def pause_program_all(cls):
+        responses = dict()
         for device in cls._devices.values():
-            device.pause_program()
+            responses[device.device_id] = device.pause_program()
+        return responses
 
     @classmethod
     def continue_program_all(cls):
+        responses = dict()
         for device in cls._devices.values():
-            device.continue_program()
+            responses[device.device_id] = device.continue_program()
+        return responses
 
     @classmethod
     def stop_program_all(cls):
+        responses = dict()
         for device in cls._devices.values():
-            device.stop_program()
+            responses[device.device_id] = device.stop_program()
+        return responses
 
     @classmethod
     def schedule_program_all(cls, schedule_time):
+        responses = dict()
         for device in cls._devices.values():
-            device.schedule_program(schedule_time)
+            responses[device.device_id] = device.schedule_program(schedule_time)
+        return responses
 
     @classmethod
     def unschedule_program_all(cls):
+        responses = dict()
         for device in cls._devices.values():
-            device.unschedule_program()
+            responses[device.device_id] = device.unschedule_program()
+        return responses
 
     @classmethod
     def fire(cls, address, device_id):
         device = cls._get_device(device_id)
-        device.fire(address)
+        return device.fire(address)
 
     @classmethod
     def testloop(cls, device_id):
         device = cls._get_device(device_id)
-        device.testloop()
+        return device.testloop()
 
     @classmethod
     def testloop_all(cls):
+        responses = dict()
         for device in cls._devices.values():
-            device.testloop()
+            responses[device.device_id] = device.testloop()
+        return responses
 
     @classmethod
     def lock(cls, device_id):
         device = cls._get_device(device_id)
-        device.lock()
+        return device.lock()
 
     @classmethod
     def unlock(cls, device_id):
         device = cls._get_device(device_id)
-        device.unlock()
+        return device.unlock()
 
     @classmethod
     def lock_all(cls):
+        responses = dict()
         for device in cls._devices.values():
-            device.lock()
+            responses[device.device_id] = device.lock()
+        return responses
 
     @classmethod
     def unlock_all(cls):
+        responses = dict()
         for device in cls._devices.values():
-            device.unlock()
-
+            responses[device.device_id] = device.unlock()
+        return responses
     @classmethod
     def get_errors(cls, device_id):
         device = cls._get_device(device_id)
@@ -202,10 +225,11 @@ class DeviceController():
     @classmethod
     def delete_errors(cls, device_id):
         device = cls._get_device(device_id)
-        device.delete_errors()
+        return device.delete_errors()
 
     @classmethod
-    def get_logs_all(cls, device_id):
+    def get_logs(cls):
+        # TODO
         device = cls._get_device(device_id)
         device.get_logs()
 
@@ -233,12 +257,12 @@ class DeviceController():
     @classmethod
     def heartbeat(cls, device_id):
         device = cls._get_device(device_id)
-        device.heartbeat()
+        return device.heartbeat()
 
     @classmethod
     def notification(cls, data, device_id):
         device = cls._get_device(device_id)
-        device.notification(data)
+        return device.notification(data)
 
     @classmethod
     def get_host(cls, device_id):
@@ -255,10 +279,12 @@ class DeviceController():
         year, month, day,
         hour, minute, second, millisecond
     ):
+        responses = dict()
         for device in cls._devices.values():
-            device.set_system_time(
+            responses[device.device_id] = device.set_system_time(
                 year, month, day, hour, minute, second, millisecond
             )
+        return responses
 
     @classmethod
     def get_systems_times_all(cls):

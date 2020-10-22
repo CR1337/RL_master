@@ -18,7 +18,7 @@ class Device():
         try:
             if method == 'GET':
                 response = requests.get(
-                    url, args=data, timeout=timeout).json()
+                    url, params=data, timeout=timeout).json()
             elif method == 'POST':
                 response = requests.post(
                     url, json=data, timeout=timeout).json()
@@ -33,7 +33,6 @@ class Device():
         return response
 
     def connect(self):
-        #url = f"http://{self._host}:{Config.get('connection', 'device_port')}{Device._registration_url}"
         print(self._host)
         response = self._request(
             url=Device._registration_url,
