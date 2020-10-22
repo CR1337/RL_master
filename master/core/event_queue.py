@@ -6,7 +6,7 @@ class EventQueue():
 
     @classmethod
     def push_event(cls, event):
-        cls._event_queue.put(block=False)
+        cls._event_queue.put(item=event, block=False)
 
     @classmethod
     def pop_event(cls):
