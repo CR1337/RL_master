@@ -1,7 +1,7 @@
 from master import app
 from flask import redirect, url_for
 import os
-from master.core.environment import Environment
+from master.core.config import Config
 
 debug = True
 
@@ -18,11 +18,11 @@ if __name__ == '__main__':
             use_debugger=True,
             use_reloader=True,
             passthrough_errors=True,
-            port=Environment.get('INTERNAL_PORT'),
+            port=Config.get('connection', 'internal_port'),
             host="0.0.0.0"
         )
     else:
         app.run(
-            port=Environment.get('INTERNAL_PORT'),
+            port=Config.get('connection', 'internal_port'),
             host="0.0.0.0"
         )

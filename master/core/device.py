@@ -1,220 +1,192 @@
 import requests
 import time
-from flask_api import status
 from .config import Config
 
 
-class DeviceError(Exception):
-    pass
-
-
-class ApiException(DeviceError):
-    def __init__(self, exception_type, exception_args):
-        self.exception_type = exception_type
-        self.exception_args = exception_args
-
-
-class UnauthorizedError(DeviceError):
-    pass
-
-
-class UnknownApiError(DeviceError):
-    pass
-
-
 class Device():
+    _registration_url = "/master-registration"
 
-    def __init__(self, device_id, host):
-        self._device_id = device_id
+    def __init__(self, host):
         self._host = host
         self._last_heartbeat = None
 
-    def _request(self, url, args=None, params={}, method='GET'):
-        url = f"http://{self._host}:{Config.get('connection', 'device_port')}" + url
+    def _request(self, url, method='GET', data=None):
+        url = f"http://{self._host}:{Config.get('connection', 'device_port')}{url}"
+        data = dict() if data is None and method != 'GET' else data
+        timeout = Config.get('timeouts', 'device_request')
 
-        if method == 'GET':
-            response = requests.get(url, args=args)
-        elif method == 'POST':
-            response = requests.post(url, json=params)
-        elif method == 'DELETE':
-            response = requests.delete(url, json=params)
-
-        if response.status_code == status.HTTP_400_BAD_REQUEST:
-            json_data = response.json()
-            if 'exception_type' in json_data and 'exception_args' in json_data:
-                raise ApiException(
-                    json_data['exception_type'], json_data['exception_args']
-                )
+        try:
+            if method == 'GET':
+                response = requests.get(
+                    url, args=data, timeout=timeout).json()
+            elif method == 'POST':
+                response = requests.post(
+                    url, json=data, timeout=timeout).json()
+            elif method == 'DELETE':
+                response = requests.delete(
+                    url, json=data, timeout=timeout).json()
             else:
-                raise UnknownApiError()
-        elif response.status_code == status.HTTP_401_UNAUTHORIZED:
-            raise UnauthorizedError()
-        elif response.status_code >= status.HTTP_400_BAD_REQUEST:
-            raise UnknownApiError()
+                raise ValueError  # TODO
+        except requests.Timeout:
+            response = {'error': f"timeout after {timeout} sec."}
+
+        return response
+
+    def connect(self):
+        #url = f"http://{self._host}:{Config.get('connection', 'device_port')}{Device._registration_url}"
+        print(self._host)
+        response = self._request(
+            url=Device._registration_url,
+            method='POST',
+            data={'port': Config.get('connection', 'external_port')}
+        )
+
+        if 'error' in response.keys() or 'device_id' not in response.keys():
+            return None
         else:
-            return response
+            self._device_id = response['device_id']
+            return self
 
-    def _simple_request(self, url, args=None, params={}, method='GET'):
-        self._request(url, args, params, method)
-
-    def _json_request(self, url, args=None, params=None, method='GET'):
-        response = self._request(url, args, params, method)
-        return response.json()
+    # def disconnect(self):
+    #     ...
 
     def get_config(self, category, key):
-        return self._json_request(
+        return self._request(
             url="/config",
-            args={
+            data={
                 'category': category,
                 'key': key
             }
         )
 
     def set_config(self, entries):
-        self._simple_request(
+        return self._request(
             url="/config",
-            params={
-                "entries": entries
-            },
-            method="POST"
-        )
-
-    def get_environment(self, key):
-        return self._json_request(
-            url="/environment",
-            args={
-                "key": key
+            method="POST",
+            data={
+                'entries': entries
             }
         )
 
     def set_program(self, commands):
-        self._simple_request(
+        return self._request(
             url="/program",
-            params={
+            method="POST",
+            data={
                 'commands': commands
-            },
-            method='POST'
+            }
         )
 
     def delete_program(self):
-        self._simple_request(
+        return self._request(
             url="/program",
             method="DELETE"
         )
 
     def run_program(self):
-        self._simple_request(
+        return self._request(
             url="/program/control",
-            params={
+            method='POST',
+            data={
                 'action': 'run'
-            },
-            method='POST'
+            }
+
         )
 
     def pause_program(self):
-        self._simple_request(
+        return self._request(
             url="/program/control",
-            params={
+            method='POST',
+            data={
                 'action': 'pause'
-            },
-            method='POST'
+            }
+
         )
 
     def continue_program(self):
-        self._simple_request(
+        return self._request(
             url="/program/control",
-            params={
+            method='POST',
+            data={
                 'action': 'continue'
-            },
-            method='POST'
+            }
+
         )
 
     def stop_program(self):
-        self._simple_request(
+        return self._request(
             url="/program/control",
-            params={
+            method='POST',
+            data={
                 'action': 'stop'
-            },
-            method='POST'
+            }
         )
 
     def schedule_program(self, schedule_time):
-        self._simple_request(
+        return self._request(
             url="/program/control",
-            params={
+            method='POST',
+            data={
                 'action': 'schedule',
                 'schedule_time': schedule_time
-            },
-            method='POST'
+            }
         )
 
     def unschedule_program(self):
-        self._simple_request(
+        return self._request(
             url="/program/control",
-            params={
+            method='POST',
+            data={
                 'action': 'unschedule'
-            },
-            method='POST'
+            }
         )
 
     def fire(self, address):
-        self._simple_request(
+        return self._request(
             url="/fire",
-            params={
+            method="POST",
+            data={
                 'address': address
-            },
-            method="POST"
+            }
         )
 
     def testloop(self):
-        self._simple_request(
+        return self._request(
             url="/testloop",
             method="POST"
         )
 
     def lock(self):
-        self._simple_request(
+        return self._request(
             url="/lock",
-            params={
+            method='POST',
+            data={
                 'action': 'lock'
-            },
-            method='POST'
+            }
         )
 
     def unlock(self):
-        self._simple_request(
+        return self._request(
             url="/lock",
-            params={
+            method='POST',
+            data={
                 'action': 'unlock'
-            },
-            method='POST'
+            }
         )
 
     def get_errors(self):
-        return self._json_request(
-            url="/errors"
+        return self._request(
+            url="/errors",
         )
 
     def delete_errors(self):
-        self._simple_request(
+        return self._request(
             url="/errors",
             method='DELETE'
         )
 
     def get_logs(self, amount):
-        # TODO
-        return self._json_request(
-            url="/logs",
-            args={
-                'amount': amount
-            }
-        )
-
-    def heartbeat(self):
-        self._last_heartbeat = time.time()
-
-    def notification(self, data):
-        pass
+        ...
         # TODO
 
     def set_system_time(
@@ -222,10 +194,10 @@ class Device():
         year, month, day,
         hour, minute, second, millisecond
     ):
-        return self._json_request(
+        return self._request(
             url="/system-time",
             method="POST",
-            params={
+            data={
                 'year': year,
                 'month': month,
                 'day': day,
@@ -237,27 +209,39 @@ class Device():
         )
 
     def get_system_time(self):
-        return self._json_request(
+        return self._request(
             url="/system-time"
         )
 
+    def get_locked_state(self):
+        return self._request(
+            url="/lock"
+        )
+
+    def get_fuses(self):
+        return self._request(
+            url="/fuses"
+        )
+
+    def get_program_state(self):
+        return self._request(
+            url="/program/state",
+        )
+
+    def heartbeat(self):
+        self._last_heartbeat = time.time()
+
+    def notification(self, data):
+        ...
+        # TODO
+
     @property
     def is_locked(self):
-        return self._json_request(
-            url="/lock",
-        )['locked']
+        return self.get_locked_state()['locked']
 
     @property
     def program_state(self):
-        return self._json_request(
-            url="/program/state",
-        )['state']
-
-    @property
-    def fuses(self):
-        return self._json_request(
-            url="/fuses"
-        )
+        return self.get_program_state()['state']
 
     @property
     def host(self):

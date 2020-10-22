@@ -23,28 +23,9 @@ class DisconnectFailed(DeviceControllerError):
 
 class DeviceController():
     _devices = dict()
-    _registration_url = "/master-registration"
 
     @classmethod
     def _subnet_hosts(cls):
-        # subnet_mask_bytes = [
-        #     int(byte) for byte in Environment.get('SUBNET_MASK').split('.')
-        # ]
-        # hosts = list()
-        # for ip_byte_0, ip_byte_1, ip_byte_2, ip_byte_3 in itertools.product(
-        #     range(255 - subnet_mask_bytes[0] + 1),
-        #     range(255 - subnet_mask_bytes[1] + 1),
-        #     range(255 - subnet_mask_bytes[2] + 1),
-        #     range(255 - subnet_mask_bytes[3] + 1)
-        # ):
-        #     hosts.append(".".join(
-        #         [
-        #             str(byte)
-        #             for byte in [ip_byte_0, ip_byte_1, ip_byte_2, ip_byte_3]
-        #         ]
-        #     ))
-        # return hosts
-
         # TODO: This is a QAD-Fix!:
         subnet_mask = Config.get("connection", 'subnet_mask')
         network_address = Config.get("connection", 'network_address')
@@ -56,6 +37,8 @@ class DeviceController():
         for last_subnet_mask_byte in range(
             255 - int(subnet_mask_bytes[-1]) + 1
         ):
+            if last_subnet_mask_byte == 255:
+                continue
             hosts.append(
                 f"{network_address_bytes[0]}"
                 + f".{network_address_bytes[1]}"
@@ -69,30 +52,8 @@ class DeviceController():
 
     @classmethod
     def _connection_handler(cls, host):
-        url = f"http://{host}:{Config.get('connection', 'device_port')}{cls._registration_url}"
-        print(url)
-        try:
-            response = requests.post(
-                url=url,
-                json={
-                    # 'address': Environment.get('MASTER_IP'),
-                    'port': Config.get("connection", 'external_port')
-                },
-                timeout=0.1  # TODO: make configurable
-            )
-            response.raise_for_status()
-            json_response = response.json()
-        except Exception:
-            print("ERROR:", url)
-            return None
-        else:
-            if (
-                'device_id' not in json_response
-                or response.status_code != status.HTTP_202_ACCEPTED
-            ):
-                return None
-            else:
-                return Device(json_response['device_id'], host)
+        device = Device(host)
+        return device.connect()
 
     @classmethod
     def connect_devices(cls):
@@ -100,7 +61,6 @@ class DeviceController():
             futures = list()
             subnet_hosts = cls._subnet_hosts()
             for host in subnet_hosts:
-                print(host)
                 futures.append(
                     executor.submit(
                         cls._connection_handler,
@@ -116,26 +76,26 @@ class DeviceController():
             ):
                 cls._devices[device.device_id] = device
 
-    @classmethod
-    def disconnect_device(cls, device_id):
-        if device_id in cls._devices.keys():
-            raise InvalidDeviceId(device_id)
+    # @classmethod
+    # def disconnect_device(cls, device_id):
+    #     if device_id in cls._devices.keys():
+    #         raise InvalidDeviceId(device_id)
 
-        device = cls._devices[device_id]
-        url = (
-            f"{device.host}:{Config.get('connection', 'device_port')}"
-            + f"{cls._registration_url}"
-        )
-        try:
-            response = requests.delete(url=url)
-            response.raise_for_status()
-        except requests.HTTPError:
-            raise DisconnectFailed(device_id)
-        else:
-            if response.status_code != status.HTTP_200_OK:
-                raise DisconnectFailed(device_id)
-            else:
-                del cls._devices[device_id]
+    #     device = cls._devices[device_id]
+    #     url = (
+    #         f"{device.host}:{Config.get('connection', 'device_port')}"
+    #         + f"{cls._registration_url}"
+    #     )
+    #     try:
+    #         response = requests.delete(url=url)
+    #         response.raise_for_status()
+    #     except requests.HTTPError:
+    #         raise DisconnectFailed(device_id)
+    #     else:
+    #         if response.status_code != status.HTTP_200_OK:
+    #             raise DisconnectFailed(device_id)
+    #         else:
+    #             del cls._devices[device_id]
 
     @classmethod
     def _get_device(cls, device_id):

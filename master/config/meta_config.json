@@ -20,5 +20,11 @@
             "type": "",
             "protected": false
         }
+    },
+    "timeouts": {
+        "device_request": {
+            "type": 0.0,
+            "protected": false
+        }
     }
 }
