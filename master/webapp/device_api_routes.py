@@ -107,13 +107,6 @@ def route_error(device_id):
     elif request.method == 'DELETE':
         return DeviceController.delete_errors(device_id)
 
-
-@device_api_bp.route('/<device_id>/logs', methods=['GET'])
-def route_logs(device_id):
-    host = DeviceController.get_host(device_id)
-    return redirect(f"http://{host}/logs")
-
-
 @device_api_bp.route("/system-time", methods=["GET", "POST"])
 def route_system_time():
     if request.method == "GET":

@@ -39,9 +39,6 @@ class Config():
     _CONFIG_FILENAME = "master/config/config.json"
     _META_CONFIG_FILENAME = "master/config/meta_config.json"
 
-    # _CONFIG_FILENAME = "device/config/config.json"
-    # _META_CONFIG_FILENAME = "device/config/meta_config.json"
-
     try:
         with open(_CONFIG_FILENAME, 'r', encoding='utf-8') as file:
             _config_data = json.load(file)

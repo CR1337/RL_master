@@ -1,8 +1,5 @@
 from concurrent.futures import ThreadPoolExecutor, as_completed
 
-import requests
-from flask_api import status
-
 from .device import Device
 from .config import Config
 
@@ -76,27 +73,6 @@ class DeviceController():
             ):
                 cls._devices[device.device_id] = device
 
-    # @classmethod
-    # def disconnect_device(cls, device_id):
-    #     if device_id in cls._devices.keys():
-    #         raise InvalidDeviceId(device_id)
-
-    #     device = cls._devices[device_id]
-    #     url = (
-    #         f"{device.host}:{Config.get('connection', 'device_port')}"
-    #         + f"{cls._registration_url}"
-    #     )
-    #     try:
-    #         response = requests.delete(url=url)
-    #         response.raise_for_status()
-    #     except requests.HTTPError:
-    #         raise DisconnectFailed(device_id)
-    #     else:
-    #         if response.status_code != status.HTTP_200_OK:
-    #             raise DisconnectFailed(device_id)
-    #         else:
-    #             del cls._devices[device_id]
-
     @classmethod
     def _get_device(cls, device_id):
         try:
@@ -167,7 +143,9 @@ class DeviceController():
     def schedule_program_all(cls, schedule_time):
         responses = dict()
         for device in cls._devices.values():
-            responses[device.device_id] = device.schedule_program(schedule_time)
+            responses[device.device_id] = device.schedule_program(
+                schedule_time
+            )
         return responses
 
     @classmethod
@@ -217,6 +195,7 @@ class DeviceController():
         for device in cls._devices.values():
             responses[device.device_id] = device.unlock()
         return responses
+
     @classmethod
     def get_errors(cls, device_id):
         device = cls._get_device(device_id)
@@ -226,12 +205,6 @@ class DeviceController():
     def delete_errors(cls, device_id):
         device = cls._get_device(device_id)
         return device.delete_errors()
-
-    @classmethod
-    def get_logs(cls):
-        # TODO
-        device = cls._get_device(device_id)
-        device.get_logs()
 
     @classmethod
     def get_lock_states_all(cls):

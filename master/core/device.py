@@ -46,9 +46,6 @@ class Device():
             self._device_id = response['device_id']
             return self
 
-    # def disconnect(self):
-    #     ...
-
     # TODO: maybe get_config_all and get_config_category?
 
     def get_config(self, category, key):
@@ -185,10 +182,6 @@ class Device():
             url="/errors",
             method='DELETE'
         )
-
-    def get_logs(self, amount):
-        ...
-        # TODO
 
     def set_system_time(
         self,

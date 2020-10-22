@@ -30,8 +30,3 @@ def route_event_stream():
             event = EventQueue.pop_event()
             yield f"id:{i}\nevent:{event.event_type}\ndata:{event.data}\n\n"
     return Response(event_stream(), mimetype="text/event-stream")
-
-
-@user_bp.route("/logs", methods=["GET"])
-def route_logs():
-    raise NotImplementedError
