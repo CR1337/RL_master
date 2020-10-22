@@ -1,10 +1,12 @@
 from flask import Blueprint, request, make_response
 from ..core.device_controller import DeviceController
+from ..webapp import handle_exceptions
 
 master_bp = Blueprint('master_blueprint', __name__)
 
 
 @master_bp.route("/notification", methods=['POST'])
+@handle_exceptions
 def route_notification():
     device_id = request.get_json(force=True)['device_id']
     data = request.form['data']
@@ -13,6 +15,7 @@ def route_notification():
 
 
 @master_bp.route("/heartbeat", methods=['POST'])
+@handle_exceptions
 def route_heartbeat():
     device_id = request.get_json(force=True)['device_id']
     DeviceController.heartbeat(device_id)
@@ -20,6 +23,7 @@ def route_heartbeat():
 
 
 @master_bp.route("/connect-devices", methods=['POST'])
+@handle_exceptions
 def route_connect_devices():
     DeviceController.connect_devices()
     devices = list(DeviceController.get_devices().keys())

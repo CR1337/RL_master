@@ -1,7 +1,8 @@
-from flask import Blueprint, request, redirect, make_response
+from flask import Blueprint, request, make_response
 from datetime import datetime
 from ..core.device_controller import DeviceController
 from ..util.sys_time import set_system_time
+from ..webapp import handle_exceptions
 
 import json
 
@@ -9,6 +10,7 @@ device_api_bp = Blueprint('device_api_blueprint', __name__)
 
 
 @device_api_bp.route('/<device_id>/config', methods=['GET', 'POST'])
+@handle_exceptions
 def route_config(device_id):
     if request.method == 'GET':
         return DeviceController.get_config(
@@ -24,6 +26,7 @@ def route_config(device_id):
 
 
 @device_api_bp.route('/program', methods=['POST', 'DELETE'])
+@handle_exceptions
 def route_program():
     # TODO: make DELETE work from cockpit
     if request.method == 'POST':
@@ -39,6 +42,7 @@ def route_program():
 
 
 @device_api_bp.route('/program/control', methods=['POST'])
+@handle_exceptions
 def route_program_control():
     action = request.form['action']
     if action == 'run':
@@ -61,31 +65,37 @@ def route_program_control():
 
 
 @device_api_bp.route('/program/state', methods=['GET'])
+@handle_exceptions
 def route_program_state():
     return DeviceController.get_program_state_all()
 
 
 @device_api_bp.route('/<device_id>/fire', methods=['POST'])
+@handle_exceptions
 def route_fire(device_id):
     return DeviceController.fire(request.form['address'], device_id)
 
 
 @device_api_bp.route('/fuses', methods=['GET'])
+@handle_exceptions
 def route_fuses():
     return DeviceController.get_fuses_all()
 
 
 @device_api_bp.route('/<device_id>/testloop', methods=['POST'])
+@handle_exceptions
 def route_testloop(device_id):
     return DeviceController.testloop(device_id)
 
 
 @device_api_bp.route('/testloop', methods=['POST'])
+@handle_exceptions
 def route_testloop_all():
     return DeviceController.testloop_all()
 
 
 @device_api_bp.route('/lock-all', methods=['GET', 'POST'])
+@handle_exceptions
 def route_lock_all():
     if request.method == 'GET':
         return DeviceController.get_lock_states_all()
@@ -101,13 +111,16 @@ def route_lock_all():
 
 
 @device_api_bp.route('/<device_id>/errors', methods=['GET', 'DELETE'])
+@handle_exceptions
 def route_error(device_id):
     if request.method == 'GET':
         return DeviceController.get_errors(device_id)
     elif request.method == 'DELETE':
         return DeviceController.delete_errors(device_id)
 
+
 @device_api_bp.route("/system-time", methods=["GET", "POST"])
+@handle_exceptions
 def route_system_time():
     if request.method == "GET":
         times = DeviceController.get_systems_times_all()
