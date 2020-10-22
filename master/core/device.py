@@ -11,7 +11,9 @@ class Device():
         self._last_heartbeat = None
 
     def _request(self, url, method='GET', data=None):
-        url = f"http://{self._host}:{Config.get('connection', 'device_port')}{url}"
+        assert method in ['GET', 'POST', 'DELETE']
+        url = f"http://{self._host}:" \
+            "{Config.get('connection', 'device_port')}{url}"
         data = dict() if data is None and method != 'GET' else data
         timeout = Config.get('timeouts', 'device_request')
 
@@ -25,8 +27,6 @@ class Device():
             elif method == 'DELETE':
                 response = requests.delete(
                     url, json=data, timeout=timeout).json()
-            else:
-                raise ValueError  # TODO
         except requests.Timeout:
             response = {'error': f"timeout after {timeout} sec."}
 
@@ -48,6 +48,8 @@ class Device():
 
     # def disconnect(self):
     #     ...
+
+    # TODO: maybe get_config_all and get_config_category?
 
     def get_config(self, category, key):
         return self._request(

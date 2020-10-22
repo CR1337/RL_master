@@ -25,6 +25,7 @@ def route_config(device_id):
 
 @device_api_bp.route('/program', methods=['POST', 'DELETE'])
 def route_program():
+    # TODO: make DELETE work from cockpit
     if request.method == 'POST':
         action = request.form['action']
         if action == 'post':
@@ -49,7 +50,9 @@ def route_program_control():
     elif action == 'stop':
         return DeviceController.stop_program_all()
     elif action == 'schedule':
-        return DeviceController.schedule_program_all(request.form['schedule_time'])
+        return DeviceController.schedule_program_all(
+            request.form['schedule_time']
+        )
     elif action == 'unschedule':
         return DeviceController.unschedule_program_all()
     else:
@@ -84,7 +87,6 @@ def route_testloop_all():
 
 @device_api_bp.route('/lock-all', methods=['GET', 'POST'])
 def route_lock_all():
-    # DeviceController.lock_all()
     if request.method == 'GET':
         return DeviceController.get_lock_states_all()
     elif request.method == 'POST':
