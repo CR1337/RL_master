@@ -20,3 +20,7 @@ def handle_exceptions(func):
         finally:
             return response
     return wrapper
+
+
+class InvalidRequest(Exception):
+    pass

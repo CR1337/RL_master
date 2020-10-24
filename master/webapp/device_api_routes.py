@@ -2,7 +2,7 @@ from flask import Blueprint, request, make_response
 from datetime import datetime
 from ..core.device_controller import DeviceController
 from ..util.sys_time import set_system_time
-from ..webapp import handle_exceptions
+from ..webapp import handle_exceptions, InvalidRequest
 
 import json
 
@@ -60,8 +60,7 @@ def route_program_control():
     elif action == 'unschedule':
         return DeviceController.unschedule_program_all()
     else:
-        # TODO: Error
-        return make_response(dict())
+        raise InvalidRequest
 
 
 @device_api_bp.route('/program/state', methods=['GET'])
@@ -106,8 +105,7 @@ def route_lock_all():
         elif action == 'unlock':
             return DeviceController.unlock_all()
         else:
-            # TODO
-            return make_response(dict())
+            raise InvalidRequest()
 
 
 @device_api_bp.route('/<device_id>/errors', methods=['GET', 'DELETE'])

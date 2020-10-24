@@ -35,3 +35,20 @@ def route_event_stream():
             event = EventQueue.pop_event()
             yield f"id:{i}\nevent:{event.event_type}\ndata:{event.data}\n\n"
     return Response(event_stream(), mimetype="text/event-stream")
+
+
+import time
+
+
+@user_bp.route("/stream-test", methods=["GET"])
+def route_stream_test():
+
+    def get_message():
+        time.sleep(1)
+        return time.ctime(time.time())
+
+    def event_stream():
+        while True:
+            yield f"data: {get_message()}\n\n"
+
+    return Response(event_stream(), mimetype="text/event-stream")
