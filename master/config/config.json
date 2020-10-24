@@ -2,9 +2,7 @@
     "connection": {
         "internal_port": 8080,
         "external_port": 8080,
-        "subnet_mask": "255.255.255.0",
-        "device_port": 5000,
-        "network_address": "192.168.0.0"
+        "device_port": 5000
     },
     "timeouts": {
         "device_request": 0.2

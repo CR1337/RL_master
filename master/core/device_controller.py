@@ -1,7 +1,7 @@
 from concurrent.futures import ThreadPoolExecutor, as_completed
 
 from .device import Device
-from .config import Config
+from ..util import network
 
 
 class DeviceControllerError(Exception):
@@ -23,28 +23,13 @@ class DeviceController():
 
     @classmethod
     def _subnet_hosts(cls):
-        # TODO: This is a QAD-Fix!:
-        subnet_mask = Config.get("connection", 'subnet_mask')
-        network_address = Config.get("connection", 'network_address')
-
-        subnet_mask_bytes = subnet_mask.split('.')
-        network_address_bytes = network_address.split('.')
-
+        network_address_bytes = network.get_network_address().split('.')
         hosts = list()
-        for last_subnet_mask_byte in range(
-            255 - int(subnet_mask_bytes[-1]) + 1
-        ):
-            if last_subnet_mask_byte == 255:
-                continue
-            hosts.append(
-                f"{network_address_bytes[0]}"
-                + f".{network_address_bytes[1]}"
-                + f".{network_address_bytes[2]}"
-                + f".{last_subnet_mask_byte}"
-            )
-
         hosts.append("127.0.0.1")
-
+        for last_byte in range(1, 255):
+            hosts.append(
+                ".".join(network_address_bytes[0:3] + [str(last_byte)])
+            )
         return hosts
 
     @classmethod

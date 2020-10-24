@@ -13,7 +13,7 @@ class Device():
     def _request(self, url, method='GET', data=None):
         assert method in ['GET', 'POST', 'DELETE']
         url = f"http://{self._host}:" \
-            "{Config.get('connection', 'device_port')}{url}"
+            f"{Config.get('connection', 'device_port')}{url}"
         data = dict() if data is None and method != 'GET' else data
         timeout = Config.get('timeouts', 'device_request')
 
