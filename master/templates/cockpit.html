@@ -66,20 +66,18 @@
             <input type="hidden" name="millisecond" value="0">
             <input type="submit" name="schedule_program" value="Set System Time" />
         </form><br>
-        <div id="event-div">...</div>
+        <div id="event_div">...</div>
+        <div id="target_div">...</div>
         <script type="text/javascript">
             var targetContainer = document.getElementById("event_div");
             var eventSource = new EventSource("/user/event-stream")
               eventSource.onmessage = function(e) {
               targetContainer.innerHTML = e.data;
             };
-        </script>
-        <div id="target_div">...</div>
-        <script type="text/javascript">
-            var targetContainer = document.getElementById("target_div");
-            var eventSource = new EventSource("/user/stream-test")
-              eventSource.onmessage = function(e) {
-              targetContainer.innerHTML = e.data;
+            var targetContainer_2 = document.getElementById("target_div");
+            var eventSource_2 = new EventSource("/user/stream-test")
+              eventSource_2.onmessage = function(e) {
+              targetContainer_2.innerHTML = e.data;
             };
         </script>
     </body>

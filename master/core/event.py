@@ -1,8 +1,8 @@
 class Event():
 
     def __init__(self, event_type, data={}):
-        self._data = dict()
-        self._event_type = ""
+        self._data = data
+        self._event_type = event_type
 
     @property
     def data(self):
