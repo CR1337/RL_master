@@ -13,6 +13,10 @@
             "protected": true
         }
     },
+    "timings": {
+        "type": 0.0,
+        "protected": true
+    },
     "timeouts": {
         "device_request": {
             "type": 0.0,

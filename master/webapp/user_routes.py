@@ -1,10 +1,13 @@
 from itertools import count
 import json
+import time
+from datetime import datetime
 
 from flask import (Blueprint, Response, redirect,
                    url_for, render_template)
 
 from ..core.event_queue import EventQueue
+from ..core.config import Config
 from ..webapp import handle_exceptions
 
 user_bp = Blueprint('user_blueprint', __name__)
@@ -43,18 +46,17 @@ def route_event_stream():
     return Response(event_stream(), mimetype="text/event-stream")
 
 
-import time
-
-
-@user_bp.route("/stream-test", methods=["GET"])
-def route_stream_test():
-
-    def get_message():
-        time.sleep(1)
-        return time.ctime(time.time())
-
-    def event_stream():
-        while True:
-            yield f"data: {get_message()}\n\n"
-
-    return Response(event_stream(), mimetype="text/event-stream")
+@user_bp.route("/heartbeat-stream", methods=["GET"])
+@handle_exceptions
+def route_heartbeat_stream():
+    def heartbeat_stream():
+        period = Config.get('timings', 'heartbeat_period')
+        for i in count(start=0):
+            data = {
+                'count': i,
+                'type': 'master-heartbeat',
+                'time': str(datetime.now())
+            }
+            yield f"data: {json.dumps(data)}\n\n"
+            time.sleep(period)
+    return Response(heartbeat_stream(), mimetype="text/event-stream")

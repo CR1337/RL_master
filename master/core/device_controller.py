@@ -215,7 +215,9 @@ class DeviceController():
         return fuses
 
     @classmethod
-    def heartbeat(cls, device_id):
+    def heartbeat(cls, device_id, time):
+        event = Event('device_heartbeat', {'device_id': device_id, 'time': time})
+        EventQueue.push_event(event)
         device = cls._get_device(device_id)
         return device.heartbeat()
 

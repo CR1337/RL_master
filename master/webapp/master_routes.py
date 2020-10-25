@@ -16,8 +16,8 @@ def route_notification():
 @master_bp.route("/heartbeat", methods=['POST'])
 @handle_exceptions
 def route_heartbeat():
-    device_id = request.get_json(force=True)['device_id']
-    DeviceController.heartbeat(device_id)
+    data = request.get_json(force=True)
+    DeviceController.heartbeat(data['device_id'], data['time'])
     return make_response(dict())
 
 

@@ -4,6 +4,9 @@
         "external_port": 8080,
         "device_port": 5000
     },
+    "timings": {
+        "heartbeat_period": 0.5
+    },
     "timeouts": {
         "device_request": 0.2
     }
