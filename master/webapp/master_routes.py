@@ -8,9 +8,8 @@ master_bp = Blueprint('master_blueprint', __name__)
 @master_bp.route("/notification", methods=['POST'])
 @handle_exceptions
 def route_notification():
-    device_id = request.get_json(force=True)['device_id']
-    data = request.form['data']
-    DeviceController.notification(data, device_id)
+    data = request.get_json(force=True)['data']
+    DeviceController.notification(data)
     return make_response(dict())
 
 

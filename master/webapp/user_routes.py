@@ -1,4 +1,5 @@
 from itertools import count
+import json
 
 from flask import (Blueprint, Response, redirect,
                    url_for, render_template)
@@ -33,7 +34,12 @@ def route_event_stream():
     def event_stream():
         for i in count(start=0):
             event = EventQueue.pop_event()
-            yield f"id:{i}\nevent:{event.event_type}\ndata:{event.data}\n\n"
+            data = {
+                'count': i,
+                'type': event.event_type,
+                'data': event.data
+            }
+            yield f"data: {json.dumps(data)}\n\n"
     return Response(event_stream(), mimetype="text/event-stream")
 
 

@@ -2,6 +2,8 @@ from concurrent.futures import ThreadPoolExecutor, as_completed
 
 from .device import Device
 from ..util import network
+from .event import Event
+from .event_queue import EventQueue
 
 
 class DeviceControllerError(Exception):
@@ -218,9 +220,9 @@ class DeviceController():
         return device.heartbeat()
 
     @classmethod
-    def notification(cls, data, device_id):
-        device = cls._get_device(device_id)
-        return device.notification(data)
+    def notification(cls, data):
+        event = Event(data['type'], data)
+        EventQueue.push_event(event)
 
     @classmethod
     def get_host(cls, device_id):

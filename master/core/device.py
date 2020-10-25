@@ -225,10 +225,6 @@ class Device():
     def heartbeat(self):
         self._last_heartbeat = time.time()
 
-    def notification(self, data):
-        ...
-        # TODO
-
     @property
     def is_locked(self):
         return self.get_locked_state()['locked']
