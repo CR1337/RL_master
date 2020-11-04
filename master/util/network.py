@@ -23,7 +23,7 @@ else:
     #     )[20:24])
 
     def get_hostname():
-        result = subprocess.run(["ifconfig", "wlan0"], encoding='utf-8')
+        result = subprocess.run(["ifconfig", "wlan0"], encoding='utf-8', capture_output=True)
         result_str = result.stdout
         idx = result_str.find('inet ')
         return result_str[idx:].split(' ')[1]
