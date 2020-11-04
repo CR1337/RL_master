@@ -27,3 +27,9 @@ def route_connect_devices():
     DeviceController.connect_devices()
     devices = list(DeviceController.get_devices().keys())
     return make_response({'devcies': devices})
+
+
+@master_bp.after_request
+def after_request(response):
+    response.headers['Access-Control-Allow-Origin'] = '*'
+    return response

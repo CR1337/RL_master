@@ -60,3 +60,9 @@ def route_heartbeat_stream():
             yield f"data: {json.dumps(data)}\n\n"
             time.sleep(period)
     return Response(heartbeat_stream(), mimetype="text/event-stream")
+
+
+@user_bp.after_request
+def after_request(response):
+    response.headers['Access-Control-Allow-Origin'] = '*'
+    return response
