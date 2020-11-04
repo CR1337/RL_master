@@ -29,6 +29,8 @@ class Device():
                     url, json=data, timeout=timeout).json()
         except requests.Timeout:
             response = {'error': f"timeout after {timeout} sec."}
+        except Exception:
+            response = {'error': "unknown connection error."}
 
         return response
 
