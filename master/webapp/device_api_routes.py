@@ -128,8 +128,8 @@ def route_system_time():
         return times
     elif request.method == "POST":
         data = request.form
-        time_params = {
-            'year': 0, 'month': 0, 'day': 0,
+        time_params = {  # TODO
+            'year': 2020, 'month': 12, 'day': 31,
             'hour': 0, 'minute': 0, 'second': 0, 'millisecond': 0
         }
         for key in time_params.keys():
