@@ -30,7 +30,7 @@ def route_connect_devices():
         {'device_id': device.device_id, 'n_chips': device.n_chips}
         for device in DeviceController.get_devices().values()
     ]
-    return make_response({'devcies': devices})
+    return make_response({'devices': devices})
 
 
 @master_bp.after_request
