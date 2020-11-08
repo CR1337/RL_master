@@ -128,7 +128,7 @@ class Device():
             method='POST',
             data={
                 'action': 'schedule',
-                'schedule_time': schedule_time
+                'time': schedule_time
             }
         )
 

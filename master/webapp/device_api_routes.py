@@ -55,7 +55,7 @@ def route_program_control():
         return DeviceController.stop_program_all()
     elif action == 'schedule':
         return DeviceController.schedule_program_all(
-            request.form['schedule_time']
+            request.form['time']
         )
     elif action == 'unschedule':
         return DeviceController.unschedule_program_all()
