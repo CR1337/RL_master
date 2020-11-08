@@ -25,10 +25,10 @@ def route_heartbeat():
 @handle_exceptions
 def route_connect_devices():
     DeviceController.connect_devices()
-    devices = list(DeviceController.get_devices().keys())
+    # devices = list(DeviceController.get_devices().keys())
     devices = [
         {'device_id': device.device_id, 'n_chips': device.n_chips}
-        for device in DeviceController.get_devices()
+        for device in DeviceController.get_devices().values()
     ]
     return make_response({'devcies': devices})
 
