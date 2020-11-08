@@ -41,9 +41,9 @@ def route_program():
     #     return DeviceController.delete_program_all()
 
     if request.method == 'POST':
+        print(request.form)
         commands = request.form['commands']
         program_name = request.form['program_name']
-        print(program_name, "\n", commands)
         return DeviceController.set_program_all(commands, program_name)
     elif request.method == 'DELETE':
         return DeviceController.delete_program_all()
