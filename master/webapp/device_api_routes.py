@@ -28,15 +28,22 @@ def route_config(device_id):
 @device_api_bp.route('/program', methods=['POST', 'DELETE'])
 @handle_exceptions
 def route_program():
-    # TODO: make DELETE work from cockpit
+    # # TODO: make DELETE work from cockpit
+    # if request.method == 'POST':
+    #     action = request.form['action']
+    #     if action == 'post':
+    #         file = request.files['program_file']
+    #         commands = json.load(file)
+    #         return DeviceController.set_program_all(commands)
+    #     elif action == 'delete':
+    #         return DeviceController.delete_program_all()
+    # elif request.method == 'DELETE':
+    #     return DeviceController.delete_program_all()
+
     if request.method == 'POST':
-        action = request.form['action']
-        if action == 'post':
-            file = request.files['program_file']
-            commands = json.load(file)
-            return DeviceController.set_program_all(commands)
-        elif action == 'delete':
-            return DeviceController.delete_program_all()
+        commands = request.form['commands']
+        program_name = request.form['program_name']
+        return DeviceController.set_program_all(commands, program_name)
     elif request.method == 'DELETE':
         return DeviceController.delete_program_all()
 

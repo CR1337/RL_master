@@ -85,10 +85,12 @@ class DeviceController():
         return responses
 
     @classmethod
-    def set_program_all(cls, commands):
+    def set_program_all(cls, commands, program_name):
         responses = dict()
         for device in cls._devices.values():
-            responses[device.device_id] = device.set_program(commands)
+            responses[device.device_id] = device.set_program(
+                commands, program_name
+            )
         return responses
 
     @classmethod

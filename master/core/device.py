@@ -68,12 +68,13 @@ class Device():
             }
         )
 
-    def set_program(self, commands):
+    def set_program(self, commands, program_name):
         return self._request(
             url="/program",
             method="POST",
             data={
-                'commands': commands
+                'commands': commands,
+                'program_name': program_name
             }
         )
 
