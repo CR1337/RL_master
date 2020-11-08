@@ -186,21 +186,13 @@ class Device():
         )
 
     def set_system_time(
-        self,
-        year, month, day,
-        hour, minute, second, millisecond
+        self, time
     ):
         return self._request(
             url="/system-time",
             method="POST",
             data={
-                'year': year,
-                'month': month,
-                'day': day,
-                'hour': hour,
-                'minute': minute,
-                'second': second,
-                'millisecond': millisecond
+                'time': time
             }
         )
 

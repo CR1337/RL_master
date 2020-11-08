@@ -236,15 +236,11 @@ class DeviceController():
         return cls._devices
 
     @classmethod
-    def set_system_time_all(
-        cls,
-        year, month, day,
-        hour, minute, second, millisecond
-    ):
+    def set_system_time_all(cls, time):
         responses = dict()
         for device in cls._devices.values():
             responses[device.device_id] = device.set_system_time(
-                year, month, day, hour, minute, second, millisecond
+                time
             )
         return responses
 
