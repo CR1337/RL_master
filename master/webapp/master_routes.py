@@ -26,6 +26,10 @@ def route_heartbeat():
 def route_connect_devices():
     DeviceController.connect_devices()
     devices = list(DeviceController.get_devices().keys())
+    devices = [
+        {'device_id': device.device_id, 'n_chips': device.n_chips}
+        for device in DeviceController.get_devices()
+    ]
     return make_response({'devcies': devices})
 
 

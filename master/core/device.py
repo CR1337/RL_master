@@ -46,6 +46,7 @@ class Device():
             return None
         else:
             self._device_id = response['device_id']
+            self._n_chips = response['n_chips']
             return self
 
     # TODO: maybe get_config_all and get_config_category?
@@ -239,3 +240,7 @@ class Device():
     @property
     def device_id(self):
         return self._device_id
+
+    @property
+    def n_chips(self):
+        return self._n_chips
