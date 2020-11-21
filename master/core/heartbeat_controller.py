@@ -12,9 +12,9 @@ class HeartbeatController:
         self._period = Config.get('timings', 'heartbeat_period')
 
     def heartbeat_stream(self):
+        time.sleep(self._period)
         for i in count(start=0):
             data = {
-                'count': i,
                 'time': get_system_time()
             }
             for device in DeviceController.get_devices():
@@ -28,5 +28,5 @@ class HeartbeatController:
                     'last_heartbeat': device.last_heartbeat
                 }
                 data[device.device_id] = device_data
-            yield f"data: {json.dumps(data)}\n\n"
+            yield f"data: {json.dumps(data)}\nid: {str(i)}\n\n"
             time.sleep(self._period)
