@@ -17,7 +17,7 @@ def route_notification():
 @handle_exceptions
 def route_heartbeat():
     data = request.get_json(force=True)
-    DeviceController.heartbeat(data['device_id'], data['time'])
+    DeviceController.heartbeat(data)
     return make_response(dict())
 
 

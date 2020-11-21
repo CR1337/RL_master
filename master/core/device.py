@@ -10,6 +10,14 @@ class Device():
         self._host = host
         self._last_heartbeat = None
 
+        self._system_time = None
+        self._locked = None
+        self._program_state = None
+        self._scheduled_time = None
+        self._program_name = None
+        self._fuse_states = None
+        self._error_states = None
+
     def _request(self, url, method='GET', data=None):
         assert method in ['GET', 'POST', 'DELETE']
         url = f"http://{self._host}:" \
@@ -218,8 +226,16 @@ class Device():
             url="/program/state",
         )
 
-    def heartbeat(self):
+    def heartbeat(self, data):
         self._last_heartbeat = time.time()
+
+        self._system_time = data['time']
+        self._locked = data['locked']
+        self._program_state = data['program_state']
+        self._scheduled_time = data['scheduled_time']
+        self._program_name = data['program_name']
+        self._fuse_states = data['fuse_states']
+        self._error_states = data['error_states']
 
     @property
     def is_locked(self):
