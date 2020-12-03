@@ -17,6 +17,7 @@ class HeartbeatController:
             data = {
                 'time': get_system_time()
             }
+            data['devices'] = dict()
             for device in DeviceController.get_devices():
                 device_data = {
                     'locked': device.locked,
@@ -27,6 +28,6 @@ class HeartbeatController:
                     'error_states': device.error_states,
                     'last_heartbeat': device.last_heartbeat
                 }
-                data[device.device_id] = device_data
+                data['devices'][device.device_id] = device_data
             yield f"data: {json.dumps(data)}\nid: {str(i)}\n\n"
             time.sleep(self._period)

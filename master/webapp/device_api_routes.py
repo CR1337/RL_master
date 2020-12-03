@@ -130,7 +130,6 @@ def route_system_time():
         return DeviceController.set_system_time_all(time)
 
 
-
 @device_api_bp.after_request
 def after_request(response):
     response.headers['Access-Control-Allow-Origin'] = '*'
