@@ -15,12 +15,13 @@ class HeartbeatController:
         time.sleep(self._period)
         for i in count(start=0):
             data = {
-                'time': get_system_time()
+                'system_time': get_system_time()
             }
             data['devices'] = dict()
-            for device in DeviceController.get_devices():
+            for device in DeviceController.get_devices().values():
                 device_data = {
-                    'locked': device.locked,
+                    'system_time': device.system_time,
+                    'locked': device.is_locked,
                     'program_state': device.program_state,
                     'scheduled_time': device.scheduled_time,
                     'program_name': device.program_name,

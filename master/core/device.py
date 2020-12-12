@@ -211,10 +211,10 @@ class Device():
             url="/system-time"
         )
 
-    def get_locked_state(self):
-        return self._request(
-            url="/lock"
-        )
+    # def get_locked_state(self):
+    #     return self._request(
+    #         url="/lock"
+    #     )
 
     def get_fuses(self):
         return self._request(
@@ -229,7 +229,7 @@ class Device():
     def heartbeat(self, data):
         self._last_heartbeat = time.time()
 
-        self._system_time = data['time']
+        self._system_time = data['system_time']
         self._locked = data['locked']
         self._program_state = data['program_state']
         self._scheduled_time = data['scheduled_time']
@@ -238,8 +238,13 @@ class Device():
         self._error_states = data['error_states']
 
     @property
+    def system_time(self):
+        return self._system_time
+
+    @property
     def is_locked(self):
-        return self.get_locked_state()['locked']
+        # return self.get_locked_state()['locked']
+        return self._locked
 
     @property
     def program_state(self):
@@ -260,3 +265,19 @@ class Device():
     @property
     def n_chips(self):
         return self._n_chips
+
+    @property
+    def scheduled_time(self):
+        return self._scheduled_time
+
+    @property
+    def program_name(self):
+        return self._program_name
+
+    @property
+    def fuse_states(self):
+        return self._fuse_states
+
+    @property
+    def error_states(self):
+        return self._error_states

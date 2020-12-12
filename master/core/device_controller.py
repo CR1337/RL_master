@@ -27,7 +27,7 @@ class DeviceController():
     def _subnet_hosts(cls):
         network_address_bytes = network.get_network_address().split('.')
         hosts = list()
-        # hosts.append("127.0.0.1")
+        hosts.append("127.0.0.1")
         for last_byte in range(1, 255):
             hosts.append(
                 ".".join(network_address_bytes[0:3] + [str(last_byte)])
