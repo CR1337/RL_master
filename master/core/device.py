@@ -221,10 +221,10 @@ class Device():
             url="/fuses"
         )
 
-    def get_program_state(self):
-        return self._request(
-            url="/program/state",
-        )
+    # def get_program_state(self):
+    #     return self._request(
+    #         url="/program/state",
+    #     )
 
     def heartbeat(self, data):
         self._last_heartbeat = time.time()
@@ -248,7 +248,8 @@ class Device():
 
     @property
     def program_state(self):
-        return self.get_program_state()['state']
+        #return self.get_program_state()['state']
+        return self._program_state
 
     @property
     def host(self):
