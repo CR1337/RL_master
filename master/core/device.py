@@ -57,8 +57,6 @@ class Device():
             self._n_chips = response['n_chips']
             return self
 
-    # TODO: maybe get_config_all and get_config_category?
-
     def get_config(self, category, key):
         return self._request(
             url="/config",
@@ -211,20 +209,10 @@ class Device():
             url="/system-time"
         )
 
-    # def get_locked_state(self):
-    #     return self._request(
-    #         url="/lock"
-    #     )
-
     def get_fuses(self):
         return self._request(
             url="/fuses"
         )
-
-    # def get_program_state(self):
-    #     return self._request(
-    #         url="/program/state",
-    #     )
 
     def heartbeat(self, data):
         self._last_heartbeat = time.time()
