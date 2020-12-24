@@ -57,23 +57,23 @@ class Device():
             self._n_chips = response['n_chips']
             return self
 
-    def get_config(self, category, key):
-        return self._request(
-            url="/config",
-            data={
-                'category': category,
-                'key': key
-            }
-        )
+    # def get_config(self, category, key):
+    #     return self._request(
+    #         url="/config",
+    #         data={
+    #             'category': category,
+    #             'key': key
+    #         }
+    #     )
 
-    def set_config(self, entries):
-        return self._request(
-            url="/config",
-            method="POST",
-            data={
-                'entries': entries
-            }
-        )
+    # def set_config(self, entries):
+    #     return self._request(
+    #         url="/config",
+    #         method="POST",
+    #         data={
+    #             'entries': entries
+    #         }
+    #     )
 
     def set_program(self, commands, program_name):
         return self._request(
@@ -236,7 +236,7 @@ class Device():
 
     @property
     def program_state(self):
-        #return self.get_program_state()['state']
+        # return self.get_program_state()['state']
         return self._program_state
 
     @property

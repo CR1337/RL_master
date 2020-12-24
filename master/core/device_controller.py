@@ -2,8 +2,8 @@ from concurrent.futures import ThreadPoolExecutor, as_completed
 
 from .device import Device
 from ..util import network
-from .event import Event
-from .event_queue import EventQueue
+# from .event import Event
+# from .event_queue import EventQueue
 
 
 class DeviceControllerError(Exception):
@@ -67,22 +67,22 @@ class DeviceController():
         except KeyError:
             raise InvalidDeviceId(device_id)
 
-    @classmethod
-    def get_config(cls, category, key, device_id):
-        device = cls._get_device(device_id)
-        return device.get_config(category, key)
+    # @classmethod
+    # def get_config(cls, category, key, device_id):
+    #     device = cls._get_device(device_id)
+    #     return device.get_config(category, key)
 
-    @classmethod
-    def set_config(cls, entries, device_id):
-        device = cls._get_device(device_id)
-        return device.set_config(entries)
+    # @classmethod
+    # def set_config(cls, entries, device_id):
+    #     device = cls._get_device(device_id)
+    #     return device.set_config(entries)
 
-    @classmethod
-    def set_config_all(cls, entries):
-        responses = dict()
-        for device in cls._devices.values():
-            responses[device.device_id] = device.set_config(entries)
-        return responses
+    # @classmethod
+    # def set_config_all(cls, entries):
+    #     responses = dict()
+    #     for device in cls._devices.values():
+    #         responses[device.device_id] = device.set_config(entries)
+    #     return responses
 
     @classmethod
     def set_program_all(cls, commands, program_name):
@@ -218,15 +218,13 @@ class DeviceController():
 
     @classmethod
     def heartbeat(cls, data):
-        # event = Event('device_heartbeat', {'device_id': device_id, 'time': time})
-        # EventQueue.push_event(event)
         device = cls._get_device(data['device_id'])
-        return device.heartbeat(data)
+        device.heartbeat(data)
 
-    @classmethod
-    def notification(cls, data):
-        event = Event(data['type'], data)
-        EventQueue.push_event(event)
+    # @classmethod
+    # def notification(cls, data):
+    #     event = Event(data['type'], data)
+    #     EventQueue.push_event(event)
 
     @classmethod
     def get_host(cls, device_id):
