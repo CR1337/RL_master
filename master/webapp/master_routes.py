@@ -24,7 +24,7 @@ def route_connect_devices():
     return make_response({'devices': devices})
 
 
-@master_bp.route("/disconnect-device", methods=['DELETE'])
+@master_bp.route("/disconnect-device", methods=['POST'])
 @handle_exceptions
 def route_disconnect_device():
     DeviceController.disconnect_device(
