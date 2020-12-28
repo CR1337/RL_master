@@ -55,6 +55,7 @@ class Device():
         else:
             self._device_id = response['device_id']
             self._n_chips = response['n_chips']
+            return self
 
     def disconnect(self):
         return self._request(
