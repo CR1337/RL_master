@@ -55,25 +55,12 @@ class Device():
         else:
             self._device_id = response['device_id']
             self._n_chips = response['n_chips']
-            return self
 
-    # def get_config(self, category, key):
-    #     return self._request(
-    #         url="/config",
-    #         data={
-    #             'category': category,
-    #             'key': key
-    #         }
-    #     )
-
-    # def set_config(self, entries):
-    #     return self._request(
-    #         url="/config",
-    #         method="POST",
-    #         data={
-    #             'entries': entries
-    #         }
-    #     )
+    def disconnect(self):
+        return self._request(
+            url="/disconnect",
+            method='POST'
+        )
 
     def set_program(self, commands, program_name):
         return self._request(
@@ -231,12 +218,10 @@ class Device():
 
     @property
     def is_locked(self):
-        # return self.get_locked_state()['locked']
         return self._locked
 
     @property
     def program_state(self):
-        # return self.get_program_state()['state']
         return self._program_state
 
     @property

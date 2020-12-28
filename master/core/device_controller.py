@@ -61,6 +61,11 @@ class DeviceController():
                 cls._devices[device.device_id] = device
 
     @classmethod
+    def disconnect_device(cls, device_id):
+        cls._devices[device_id].disconnect()
+        del cls._devices[device_id]
+
+    @classmethod
     def _get_device(cls, device_id):
         try:
             return cls._devices[device_id]
