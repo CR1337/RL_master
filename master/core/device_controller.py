@@ -41,7 +41,7 @@ class DeviceController():
 
     @classmethod
     def connect_devices(cls):
-        with ThreadPoolExecutor() as executor:
+        with ThreadPoolExecutor(max_workers=256) as executor:
             futures = list()
             subnet_hosts = cls._subnet_hosts()
             for host in subnet_hosts:
