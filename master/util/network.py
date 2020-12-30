@@ -1,5 +1,5 @@
-import socket
 import os
+import socket
 
 if os.name == 'nt':
 
@@ -10,17 +10,7 @@ if os.name == 'nt':
 
 else:
 
-    # import fcntl
-    # import struct
     import subprocess
-
-    # def _get_hostname():
-    #     s = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
-    #     return socket.inet_ntoa(fcntl.ioctl(
-    #         s.fileno(),
-    #         0x8915,  # SIOCGIFADDR
-    #         struct.pack('256s', 'wlan0'[:15])
-    #     )[20:24])
 
     def get_hostname():
         result = subprocess.run(

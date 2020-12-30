@@ -1,5 +1,7 @@
-import requests
 import time
+
+import requests
+
 from .config import Config
 
 

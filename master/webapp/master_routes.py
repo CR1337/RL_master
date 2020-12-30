@@ -1,4 +1,5 @@
-from flask import Blueprint, request, make_response
+from flask import Blueprint, make_response, request
+
 from ..core.device_controller import DeviceController
 from ..webapp import handle_exceptions
 

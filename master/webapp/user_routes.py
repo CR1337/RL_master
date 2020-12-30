@@ -1,8 +1,7 @@
-from flask import (Blueprint, Response, redirect,
-                   url_for, render_template)
+from flask import Blueprint, Response, redirect, render_template, url_for
 
-from ..webapp import handle_exceptions
 from ..core.heartbeat_controller import HeartbeatController
+from ..webapp import handle_exceptions
 
 user_bp = Blueprint('user_blueprint', __name__)
 

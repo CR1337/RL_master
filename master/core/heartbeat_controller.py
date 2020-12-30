@@ -1,9 +1,10 @@
-from itertools import count
 import json
 import time
+from itertools import count
+
+from ..util.sys_time import get_system_time
 from .config import Config
 from .device_controller import DeviceController
-from ..util.sys_time import get_system_time
 
 
 class HeartbeatController:

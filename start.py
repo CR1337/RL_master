@@ -1,6 +1,8 @@
-from master import app
-from flask import redirect, url_for
 import os
+
+from flask import redirect, url_for
+
+from master import app
 from master.core.config import Config
 
 debug = True

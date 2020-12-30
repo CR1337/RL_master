@@ -1,9 +1,9 @@
 from flask import Flask
 from flask_cors import CORS
 
+from .webapp.device_api_routes import device_api_bp
 from .webapp.master_routes import master_bp
 from .webapp.user_routes import user_bp
-from .webapp.device_api_routes import device_api_bp
 
 
 app = Flask(__name__)

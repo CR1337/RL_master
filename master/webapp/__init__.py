@@ -1,8 +1,9 @@
-from flask import make_response
-from flask_api import status
-from functools import wraps
 import sys
 import traceback
+from functools import wraps
+
+from flask import make_response
+from flask_api import status
 
 
 def handle_exceptions(func):

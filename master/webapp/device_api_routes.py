@@ -1,10 +1,11 @@
-from flask import Blueprint, request
+import json
 from datetime import datetime
+
+from flask import Blueprint, request
+
 from ..core.device_controller import DeviceController
 from ..util.sys_time import set_system_time
-from ..webapp import handle_exceptions, InvalidRequest
-
-import json
+from ..webapp import InvalidRequest, handle_exceptions
 
 device_api_bp = Blueprint('device_api_blueprint', __name__)
 
